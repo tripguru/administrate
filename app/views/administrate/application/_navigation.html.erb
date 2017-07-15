@@ -11,7 +11,7 @@ as defined by the routes in the `admin/` namespace
   <% Administrate::Namespace.new(namespace).resources.each do |resource| %>
     <%= link_to(
       display_resource_name(resource),
-      [namespace, resource_index_route_key(resource)],
+      resource_name_link_array(namespace, resource.to_s),
       class: "navigation__link navigation__link--#{nav_link_state(resource)}"
     ) %>
   <% end %>

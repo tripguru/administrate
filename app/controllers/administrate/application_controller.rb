@@ -46,7 +46,7 @@ module Administrate
 
       if resource.save
         redirect_to(
-          [namespace, resource],
+          resource_link_array(namespace, resource),
           notice: translate_with_resource("create.success"),
         )
       else
@@ -59,7 +59,7 @@ module Administrate
     def update
       if requested_resource.update(resource_params)
         redirect_to(
-          [namespace, requested_resource],
+          resource_link_array(namespace, requested_resource),
           notice: translate_with_resource("update.success"),
         )
       else
@@ -90,6 +90,32 @@ module Administrate
       !!routes.detect do |controller, action|
         controller == resource.to_s.underscore.pluralize && action == name.to_s
       end
+    end
+
+    helper_method :resource_name_link_array
+    def resource_name_link_array(namespace, resource_name)
+      resource_namespace, klass = resource_name.split('/')
+      klass.nil? ? [namespace, resource_name] : [namespace, resource_namespace, klass]
+    end
+
+    helper_method :resource_link_array
+    def resource_link_array(namespace, resource)
+      resource_namespace, klass = resource.class.to_s.split('::')
+      resource_namespace = resource_namespace.underscore
+      klass.nil? ? [namespace, resource] : [namespace, resource_namespace, resource]
+    end
+
+    helper_method :new_resource_link_array
+    def new_resource_link_array(namespace, resource_name)
+      resource_namespace, klass = resource_name.split('/')
+      klass.nil? ? [:new, namespace, resource_name] : [:new, namespace, resource_namespace, klass]
+    end
+
+    helper_method :edit_resource_link_array
+    def edit_resource_link_array(namespace, resource)
+      resource_namespace, klass = resource.class.to_s.split('::')
+      resource_namespace = resource_namespace.underscore
+      klass.nil? ? [:edit, namespace, resource] : [:edit, namespace, resource_namespace, resource]
     end
 
     def routes

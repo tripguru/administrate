@@ -17,7 +17,7 @@ module Administrate
         human(
           count: PLURAL_MANY_COUNT,
           default: resource_name.to_s.pluralize.titleize,
-        )
+        ).split('/').last
     end
 
     def sort_order(order)
